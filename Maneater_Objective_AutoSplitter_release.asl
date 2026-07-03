@@ -1,11 +1,11 @@
-﻿state("Maneater-Win64-Shipping", "Epic")
+state("Maneater-Win64-Shipping", "Epic")
 {
     byte moviePlayerLoading: "Maneater-Win64-Shipping.exe", 0x04AC4600, 0xA8;
 }
 
 state("Maneater-Win64-Shipping", "Steam")
 {
-    byte moviePlayerLoading: "Maneater-Win64-Shipping.exe", 0x04AC4600, 0xA8;
+    byte moviePlayerLoading: "Maneater-Win64-Shipping.exe", 0x04ABC3C0, 0xA8;
 }
 
 startup
@@ -956,9 +956,14 @@ init
 
     vars.DumpNames = DumpNames;
 
+    int objectiveRootOffset = version == "Steam" ? 0x04866FA0 : 0x0486F1D0;
+    int playerRootOffset = version == "Steam" ? 0x04ADEEE0 : 0x04AE7120;
+    vars.objectiveRootOffset = objectiveRootOffset;
+    vars.playerRootOffset = playerRootOffset;
+
     vars.completedObjectivesDataPtr = new DeepPointer(
         "Maneater-Win64-Shipping.exe",
-        0x0486F1D0,
+        objectiveRootOffset,
         0x128,
         0x660,
         0x130,
@@ -968,7 +973,7 @@ init
 
     vars.completedObjectivesNumPtr = new DeepPointer(
         "Maneater-Win64-Shipping.exe",
-        0x0486F1D0,
+        objectiveRootOffset,
         0x128,
         0x660,
         0x130,
@@ -978,7 +983,7 @@ init
 
     vars.completedObjectivesMaxPtr = new DeepPointer(
         "Maneater-Win64-Shipping.exe",
-        0x0486F1D0,
+        objectiveRootOffset,
         0x128,
         0x660,
         0x130,
@@ -988,7 +993,7 @@ init
 
     vars.activeStoryIndexPtr = new DeepPointer(
         "Maneater-Win64-Shipping.exe",
-        0x0486F1D0,
+        objectiveRootOffset,
         0x128,
         0x660,
         0x130,
@@ -998,7 +1003,7 @@ init
 
     vars.storyConditionsCompletePtr = new DeepPointer(
         "Maneater-Win64-Shipping.exe",
-        0x0486F1D0,
+        objectiveRootOffset,
         0x128,
         0x660,
         0x130,
@@ -1008,7 +1013,7 @@ init
 
     vars.storyEventConditionsCompletePtr = new DeepPointer(
         "Maneater-Win64-Shipping.exe",
-        0x0486F1D0,
+        objectiveRootOffset,
         0x128,
         0x660,
         0x130,
@@ -1018,7 +1023,7 @@ init
 
     vars.playerLevelPtr = new DeepPointer(
         "Maneater-Win64-Shipping.exe",
-        0x04AE7120,
+        playerRootOffset,
         0x0,
         0x10,
         0xB8,
@@ -1028,7 +1033,7 @@ init
 
     vars.currentGrowthStagePtr = new DeepPointer(
         "Maneater-Win64-Shipping.exe",
-        0x04AE7120,
+        playerRootOffset,
         0x0,
         0x10,
         0xB8,
@@ -1036,29 +1041,29 @@ init
         0x3C4
     );
 
-    vars.playerSharkStatePtr = new DeepPointer("Maneater-Win64-Shipping.exe", 0x04AE7120, 0x0, 0x10, 0xB8, 0x228);
-    vars.playerCurrentProteinReservePtr = new DeepPointer("Maneater-Win64-Shipping.exe", 0x04AE7120, 0x0, 0x10, 0xB8, 0x228, 0x388);
-    vars.playerCurrentFatReservePtr = new DeepPointer("Maneater-Win64-Shipping.exe", 0x04AE7120, 0x0, 0x10, 0xB8, 0x228, 0x38C);
-    vars.playerCurrentMineralReservePtr = new DeepPointer("Maneater-Win64-Shipping.exe", 0x04AE7120, 0x0, 0x10, 0xB8, 0x228, 0x390);
-    vars.playerCurrentMutagenReservePtr = new DeepPointer("Maneater-Win64-Shipping.exe", 0x04AE7120, 0x0, 0x10, 0xB8, 0x228, 0x394);
-    vars.playerCurrentExpAmountPtr = new DeepPointer("Maneater-Win64-Shipping.exe", 0x04AE7120, 0x0, 0x10, 0xB8, 0x228, 0x398);
-    vars.playerCurrentPlayerLevelPtr = new DeepPointer("Maneater-Win64-Shipping.exe", 0x04AE7120, 0x0, 0x10, 0xB8, 0x228, 0x39C);
-    vars.playerCumulativeXPGainedFromObjectivesPtr = new DeepPointer("Maneater-Win64-Shipping.exe", 0x04AE7120, 0x0, 0x10, 0xB8, 0x228, 0x3A0);
-    vars.playerCumulativeXPGainedFromBountiesPtr = new DeepPointer("Maneater-Win64-Shipping.exe", 0x04AE7120, 0x0, 0x10, 0xB8, 0x228, 0x3A4);
-    vars.playerCumulativeXPGainedFromEatingPtr = new DeepPointer("Maneater-Win64-Shipping.exe", 0x04AE7120, 0x0, 0x10, 0xB8, 0x228, 0x3A8);
-    vars.playerCumulativeXPGainedFromLandmarksPtr = new DeepPointer("Maneater-Win64-Shipping.exe", 0x04AE7120, 0x0, 0x10, 0xB8, 0x228, 0x3AC);
-    vars.playerCumulativeXPGainedFromCachesPtr = new DeepPointer("Maneater-Win64-Shipping.exe", 0x04AE7120, 0x0, 0x10, 0xB8, 0x228, 0x3B0);
-    vars.playerCumulativeXPGainedFromCollectablesPtr = new DeepPointer("Maneater-Win64-Shipping.exe", 0x04AE7120, 0x0, 0x10, 0xB8, 0x228, 0x3B4);
-    vars.playerCumulativeXPGainedFromCheatsPtr = new DeepPointer("Maneater-Win64-Shipping.exe", 0x04AE7120, 0x0, 0x10, 0xB8, 0x228, 0x3B8);
-    vars.playerGrowthStageBehindTheScenesLevelPtr = new DeepPointer("Maneater-Win64-Shipping.exe", 0x04AE7120, 0x0, 0x10, 0xB8, 0x228, 0x3BC);
-    vars.playerTheoreticalPlayerLevelPtr = new DeepPointer("Maneater-Win64-Shipping.exe", 0x04AE7120, 0x0, 0x10, 0xB8, 0x228, 0x3C0);
-    vars.playerCurrentGrowthStagePtr = new DeepPointer("Maneater-Win64-Shipping.exe", 0x04AE7120, 0x0, 0x10, 0xB8, 0x228, 0x3C4);
-    vars.bountyManagerPtr = new DeepPointer("Maneater-Win64-Shipping.exe", 0x0486F1D0, 0x498, 0x28, 0x8, 0xF0, 0x5D8);
-    vars.currentBountyManagerPtr = new DeepPointer("Maneater-Win64-Shipping.exe", 0x0486F1D0, 0x498, 0x28, 0x8, 0xF0, 0x5D8);
-    vars.infamyLevelPtr = new DeepPointer("Maneater-Win64-Shipping.exe", 0x0486F1D0, 0x498, 0x28, 0x8, 0xF0, 0x5D8, 0x394);
-    vars.currentInfamyLevelPtr = new DeepPointer("Maneater-Win64-Shipping.exe", 0x0486F1D0, 0x498, 0x28, 0x8, 0xF0, 0x5D8, 0x394);
-    vars.infamyPointsPtr = new DeepPointer("Maneater-Win64-Shipping.exe", 0x0486F1D0, 0x498, 0x28, 0x8, 0xF0, 0x5D8, 0x3A0);
-    vars.lastBossLevelDefeatedPtr = new DeepPointer("Maneater-Win64-Shipping.exe", 0x0486F1D0, 0x498, 0x28, 0x8, 0xF0, 0x5D8, 0x3A4);
+    vars.playerSharkStatePtr = new DeepPointer("Maneater-Win64-Shipping.exe", playerRootOffset, 0x0, 0x10, 0xB8, 0x228);
+    vars.playerCurrentProteinReservePtr = new DeepPointer("Maneater-Win64-Shipping.exe", playerRootOffset, 0x0, 0x10, 0xB8, 0x228, 0x388);
+    vars.playerCurrentFatReservePtr = new DeepPointer("Maneater-Win64-Shipping.exe", playerRootOffset, 0x0, 0x10, 0xB8, 0x228, 0x38C);
+    vars.playerCurrentMineralReservePtr = new DeepPointer("Maneater-Win64-Shipping.exe", playerRootOffset, 0x0, 0x10, 0xB8, 0x228, 0x390);
+    vars.playerCurrentMutagenReservePtr = new DeepPointer("Maneater-Win64-Shipping.exe", playerRootOffset, 0x0, 0x10, 0xB8, 0x228, 0x394);
+    vars.playerCurrentExpAmountPtr = new DeepPointer("Maneater-Win64-Shipping.exe", playerRootOffset, 0x0, 0x10, 0xB8, 0x228, 0x398);
+    vars.playerCurrentPlayerLevelPtr = new DeepPointer("Maneater-Win64-Shipping.exe", playerRootOffset, 0x0, 0x10, 0xB8, 0x228, 0x39C);
+    vars.playerCumulativeXPGainedFromObjectivesPtr = new DeepPointer("Maneater-Win64-Shipping.exe", playerRootOffset, 0x0, 0x10, 0xB8, 0x228, 0x3A0);
+    vars.playerCumulativeXPGainedFromBountiesPtr = new DeepPointer("Maneater-Win64-Shipping.exe", playerRootOffset, 0x0, 0x10, 0xB8, 0x228, 0x3A4);
+    vars.playerCumulativeXPGainedFromEatingPtr = new DeepPointer("Maneater-Win64-Shipping.exe", playerRootOffset, 0x0, 0x10, 0xB8, 0x228, 0x3A8);
+    vars.playerCumulativeXPGainedFromLandmarksPtr = new DeepPointer("Maneater-Win64-Shipping.exe", playerRootOffset, 0x0, 0x10, 0xB8, 0x228, 0x3AC);
+    vars.playerCumulativeXPGainedFromCachesPtr = new DeepPointer("Maneater-Win64-Shipping.exe", playerRootOffset, 0x0, 0x10, 0xB8, 0x228, 0x3B0);
+    vars.playerCumulativeXPGainedFromCollectablesPtr = new DeepPointer("Maneater-Win64-Shipping.exe", playerRootOffset, 0x0, 0x10, 0xB8, 0x228, 0x3B4);
+    vars.playerCumulativeXPGainedFromCheatsPtr = new DeepPointer("Maneater-Win64-Shipping.exe", playerRootOffset, 0x0, 0x10, 0xB8, 0x228, 0x3B8);
+    vars.playerGrowthStageBehindTheScenesLevelPtr = new DeepPointer("Maneater-Win64-Shipping.exe", playerRootOffset, 0x0, 0x10, 0xB8, 0x228, 0x3BC);
+    vars.playerTheoreticalPlayerLevelPtr = new DeepPointer("Maneater-Win64-Shipping.exe", playerRootOffset, 0x0, 0x10, 0xB8, 0x228, 0x3C0);
+    vars.playerCurrentGrowthStagePtr = new DeepPointer("Maneater-Win64-Shipping.exe", playerRootOffset, 0x0, 0x10, 0xB8, 0x228, 0x3C4);
+    vars.bountyManagerPtr = new DeepPointer("Maneater-Win64-Shipping.exe", objectiveRootOffset, 0x498, 0x28, 0x8, 0xF0, 0x5D8);
+    vars.currentBountyManagerPtr = new DeepPointer("Maneater-Win64-Shipping.exe", objectiveRootOffset, 0x498, 0x28, 0x8, 0xF0, 0x5D8);
+    vars.infamyLevelPtr = new DeepPointer("Maneater-Win64-Shipping.exe", objectiveRootOffset, 0x498, 0x28, 0x8, 0xF0, 0x5D8, 0x394);
+    vars.currentInfamyLevelPtr = new DeepPointer("Maneater-Win64-Shipping.exe", objectiveRootOffset, 0x498, 0x28, 0x8, 0xF0, 0x5D8, 0x394);
+    vars.infamyPointsPtr = new DeepPointer("Maneater-Win64-Shipping.exe", objectiveRootOffset, 0x498, 0x28, 0x8, 0xF0, 0x5D8, 0x3A0);
+    vars.lastBossLevelDefeatedPtr = new DeepPointer("Maneater-Win64-Shipping.exe", objectiveRootOffset, 0x498, 0x28, 0x8, 0xF0, 0x5D8, 0x3A4);
 
     vars.prevCompletedObjectiveGuids = new HashSet<string>();
     vars.completedObjectiveGuids = new HashSet<string>();
@@ -1302,7 +1307,7 @@ init
 
         try
         {
-            IntPtr p0 = memory.ReadValue<IntPtr>(new IntPtr(modules.First().BaseAddress.ToInt64() + 0x04AE7120));
+            IntPtr p0 = memory.ReadValue<IntPtr>(new IntPtr(modules.First().BaseAddress.ToInt64() + playerRootOffset));
             IntPtr p1 = memory.ReadValue<IntPtr>(new IntPtr(p0.ToInt64() + 0x0));
             IntPtr p2 = memory.ReadValue<IntPtr>(new IntPtr(p1.ToInt64() + 0x10));
             IntPtr p3 = memory.ReadValue<IntPtr>(new IntPtr(p2.ToInt64() + 0xB8));
@@ -1668,7 +1673,7 @@ init
 
         try
         {
-            long gworldOffset = version == "Steam" ? 0x04AE2960 : 0x04AEAB90;
+            long gworldOffset = version == "Steam" ? 0x04AE2950 : 0x04AEAB90;
             IntPtr gworld = memory.ReadValue<IntPtr>(new IntPtr(modules.First().BaseAddress.ToInt64() + gworldOffset));
 
             if (gworld == IntPtr.Zero)
@@ -1774,7 +1779,7 @@ init
 
         try
         {
-            IntPtr p0 = memory.ReadValue<IntPtr>(new IntPtr(baseAddr.ToInt64() + 0x04AE7120));
+            IntPtr p0 = memory.ReadValue<IntPtr>(new IntPtr(baseAddr.ToInt64() + playerRootOffset));
             IntPtr p1 = memory.ReadValue<IntPtr>(new IntPtr(p0.ToInt64() + 0x0));
             IntPtr p2 = memory.ReadValue<IntPtr>(new IntPtr(p1.ToInt64() + 0x10));
             IntPtr p3 = memory.ReadValue<IntPtr>(new IntPtr(p2.ToInt64() + 0xB8));
@@ -1797,7 +1802,7 @@ init
 
         try
         {
-            IntPtr p0 = memory.ReadValue<IntPtr>(new IntPtr(baseAddr.ToInt64() + 0x0486F1D0));
+            IntPtr p0 = memory.ReadValue<IntPtr>(new IntPtr(baseAddr.ToInt64() + objectiveRootOffset));
             IntPtr p1 = memory.ReadValue<IntPtr>(new IntPtr(p0.ToInt64() + 0x128));
             IntPtr p2 = memory.ReadValue<IntPtr>(new IntPtr(p1.ToInt64() + 0x660));
             IntPtr p3 = memory.ReadValue<IntPtr>(new IntPtr(p2.ToInt64() + 0x130));
@@ -1820,7 +1825,7 @@ init
 
         try
         {
-            IntPtr p0 = memory.ReadValue<IntPtr>(new IntPtr(baseAddr.ToInt64() + 0x0486F1D0));
+            IntPtr p0 = memory.ReadValue<IntPtr>(new IntPtr(baseAddr.ToInt64() + objectiveRootOffset));
             IntPtr p1 = memory.ReadValue<IntPtr>(new IntPtr(p0.ToInt64() + 0x498));
             IntPtr p2 = memory.ReadValue<IntPtr>(new IntPtr(p1.ToInt64() + 0x28));
             IntPtr p3 = memory.ReadValue<IntPtr>(new IntPtr(p2.ToInt64() + 0x8));
@@ -1843,7 +1848,7 @@ init
 
         try
         {
-            long gworldOffset = version == "Steam" ? 0x04AE2960 : 0x04AEAB90;
+            long gworldOffset = version == "Steam" ? 0x04AE2950 : 0x04AEAB90;
             IntPtr gworld = memory.ReadValue<IntPtr>(new IntPtr(baseAddr.ToInt64() + gworldOffset));
             byte streamingPending = memory.ReadValue<byte>(new IntPtr(gworld.ToInt64() + 0x4E0));
             byte byte11B = memory.ReadValue<byte>(new IntPtr(gworld.ToInt64() + 0x11B));
@@ -2065,7 +2070,7 @@ update
         vars.NamesInitialized = true;
         
     }
-    bool loading = version == "Epic" && current.moviePlayerLoading == 1;
+    bool loading = current.moviePlayerLoading == 1;
 
     if (vars.wasLoading && !loading)
     {
@@ -2812,7 +2817,7 @@ update
 split
 {
     bool blockSplits =
-        (version == "Epic" && current.moviePlayerLoading == 1) ||
+        (current.moviePlayerLoading == 1) ||
         vars.suppressSplitThisUpdate ||
         !vars.isGameplayWorld;
 
@@ -3367,7 +3372,7 @@ reset
 
 isLoading
 {
-    return version == "Epic" && current.moviePlayerLoading == 1;
+    return current.moviePlayerLoading == 1;
 }
 
 
