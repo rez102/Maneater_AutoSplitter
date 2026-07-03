@@ -23,6 +23,7 @@ startup
     vars.targetOrder = new List<string>();
     vars.targetNameLabels = new Dictionary<string, string>();
     vars.targetLevelSplits = new Dictionary<string, int>();
+    vars.targetGrowthSplits = new Dictionary<string, int>();
     vars.targetXPSplits = new Dictionary<string, int>();
     vars.targetInfamySplits = new Dictionary<string, int>();
     vars.targetDlcInfamySplits = new Dictionary<string, int>();
@@ -30,6 +31,7 @@ startup
     vars.pendingStorySplits = new HashSet<string>();
     vars.pendingObjectiveSplits = new HashSet<string>();
     vars.pendingPlayerLevelSplits = new HashSet<string>();
+    vars.pendingPlayerGrowthSplits = new HashSet<string>();
     vars.pendingPlayerXPSplits = new HashSet<string>();
     vars.pendingInfamySplits = new HashSet<string>();
     vars.pendingDlcInfamySplits = new HashSet<string>();
@@ -40,6 +42,16 @@ startup
         settings.Add(id, false, "Player Level " + level, "splits_player_levels");
         vars.targetLevelSplits[id] = level;
     }
+
+    settings.Add("splits_player_growth", true, "Growth Stages", "splits_player_state");
+    settings.Add("split_growth_teen", false, "Growth Stage - Teen", "splits_player_growth");
+    settings.Add("split_growth_adult", false, "Growth Stage - Adult", "splits_player_growth");
+    settings.Add("split_growth_elder", false, "Growth Stage - Elder", "splits_player_growth");
+    settings.Add("split_growth_mega", false, "Growth Stage - Mega", "splits_player_growth");
+    vars.targetGrowthSplits["split_growth_teen"] = 2;
+    vars.targetGrowthSplits["split_growth_adult"] = 3;
+    vars.targetGrowthSplits["split_growth_elder"] = 4;
+    vars.targetGrowthSplits["split_growth_mega"] = 5;
 
     for (int rank = 1; rank <= 10; rank++)
     {
@@ -1060,6 +1072,7 @@ init
     vars.pendingStorySplits = new HashSet<string>();
     vars.pendingObjectiveSplits = new HashSet<string>();
     vars.pendingPlayerLevelSplits = new HashSet<string>();
+    vars.pendingPlayerGrowthSplits = new HashSet<string>();
     vars.pendingPlayerXPSplits = new HashSet<string>();
     vars.pendingInfamySplits = new HashSet<string>();
     vars.pendingDlcInfamySplits = new HashSet<string>();
@@ -1134,6 +1147,7 @@ init
     vars.pendingStorySplits.Clear();
     vars.pendingObjectiveSplits.Clear();
     vars.pendingPlayerLevelSplits.Clear();
+    vars.pendingPlayerGrowthSplits.Clear();
     vars.pendingPlayerXPSplits.Clear();
     vars.pendingInfamySplits.Clear();
     vars.pendingDlcInfamySplits.Clear();
@@ -2384,6 +2398,7 @@ update
         vars.completedObjectivesNumIncreaseRecentFrames = 0;
         vars.splittedPlayerState.Clear();
         vars.pendingPlayerLevelSplits.Clear();
+        vars.pendingPlayerGrowthSplits.Clear();
         vars.pendingPlayerXPSplits.Clear();
         vars.hadValidPlayerStateRead = false;
         vars.hasPlayerStateBaseline = false;
@@ -2505,6 +2520,33 @@ update
                         {
                             
                         }
+                    }
+                }
+            }
+
+            if (vars.playerStateLastValid && vars.canLevelSplit)
+            {
+                foreach (var pair in vars.targetGrowthSplits)
+                {
+                    string settingId = pair.Key;
+
+                    if (!settings[settingId])
+                    {
+                        continue;
+                    }
+
+                    if (vars.splittedPlayerState.Contains(settingId) ||
+                        vars.pendingPlayerGrowthSplits.Contains(settingId))
+                    {
+                        continue;
+                    }
+
+                    int targetGrowth = pair.Value;
+
+                    if (vars.prevPlayerCurrentGrowthStage < targetGrowth &&
+                        vars.playerCurrentGrowthStage >= targetGrowth)
+                    {
+                        vars.pendingPlayerGrowthSplits.Add(settingId);
                     }
                 }
             }
@@ -2856,6 +2898,30 @@ split
             }
         }
 
+        foreach (var pair in vars.targetGrowthSplits)
+        {
+            string settingId = pair.Key;
+
+            if (!settings[settingId])
+            {
+                continue;
+            }
+
+            if (vars.splittedPlayerState.Contains(settingId))
+            {
+                continue;
+            }
+
+            if (vars.pendingPlayerGrowthSplits.Contains(settingId))
+            {
+                int targetGrowth = pair.Value;
+                vars.pendingPlayerGrowthSplits.Remove(settingId);
+                vars.splittedPlayerState.Add(settingId);
+                
+                return true;
+            }
+        }
+
         foreach (var pair in vars.targetXPSplits)
         {
             string settingId = pair.Key;
@@ -3127,6 +3193,42 @@ split
 
                 if (prevEffectiveLevel < targetLevel &&
                     effectiveLevel >= targetLevel)
+                {
+                    vars.splittedPlayerState.Add(settingId);
+                    
+                    return true;
+                }
+            }
+        }
+
+        if (vars.playerStateLastValid && vars.canLevelSplit)
+        {
+            foreach (var pair in vars.targetGrowthSplits)
+            {
+                string settingId = pair.Key;
+
+                if (!settings[settingId])
+                {
+                    continue;
+                }
+
+                if (vars.splittedPlayerState.Contains(settingId))
+                {
+                    continue;
+                }
+
+                int targetGrowth = pair.Value;
+
+                if (vars.pendingPlayerGrowthSplits.Contains(settingId))
+                {
+                    vars.pendingPlayerGrowthSplits.Remove(settingId);
+                    vars.splittedPlayerState.Add(settingId);
+                    
+                    return true;
+                }
+
+                if (vars.prevPlayerCurrentGrowthStage < targetGrowth &&
+                    vars.playerCurrentGrowthStage >= targetGrowth)
                 {
                     vars.splittedPlayerState.Add(settingId);
                     
