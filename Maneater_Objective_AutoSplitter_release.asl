@@ -2066,9 +2066,23 @@ update
 
     if (!vars.NamesInitialized && vars.GNames != IntPtr.Zero)
     {
-        vars.Names = vars.DumpNames();
-        vars.NamesInitialized = true;
-        
+        try
+        {
+            var names = vars.DumpNames();
+
+            if (names.ContainsValue("WorldMap_P") &&
+                names.ContainsValue("BP_PlayerObjectiveManager_C") &&
+                names.ContainsValue("BountyManager_BP_C") &&
+                names.ContainsValue("BP_PlayerSharkState_C"))
+            {
+                vars.Names = names;
+                vars.NamesInitialized = true;
+            }
+        }
+        catch
+        {
+            vars.NamesInitialized = false;
+        }
     }
     bool loading = current.moviePlayerLoading == 1;
 
